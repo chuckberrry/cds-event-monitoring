@@ -33,10 +33,10 @@ This package requires specific configurations in your package.json.
       "event-monitoring": {
         "retentionInDays": 7,
         "topics": [
-          "brenntag/dih-tms/events/*"
+          "<namespace>/events/*"
         ],
         "dead-message-queues": [
-          "brenntag/dih-tms/events/dih-tms-api-app/dead-message-queue"
+          "<namespace>/events/dih-tms-api-app/dead-message-queue"
         ]
       }
     }

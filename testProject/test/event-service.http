@@ -31,7 +31,7 @@ Content-Type: application/json
 {{auth}}
 
 {
-  "topic": "brenntag/dih-tms/events/tms/dl/supplier",
+  "topic": "<namespace>/events/tms/dl/supplier",
   "startTimestamp": "2024-10-11T19:40:19.719Z",
   "endTimestamp": "2024-10-12T19:40:19.719Z"
 }
