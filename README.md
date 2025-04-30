@@ -1,6 +1,6 @@
 # CDS Event Monitoring Plugin
 
-The Event Monitoring Plugin provides a robust event monitoring service capable of hooking into multiple topics and storing event data in a database table. It exposes this data through a CDS service that users can extend as needed. For an example of how to use this package, refer to the testProject folder.
+The Event Monitoring Plugin provides a robust event monitoring service capable of hooking into multiple topics and storing event data in a database table. It exposes this data through a CDS service that users can extend as needed. For an example of how to use this package, refer to the testProject folder of the github repository.
 
 ## Table of Content
 
@@ -24,7 +24,7 @@ To enable event monitoring, add this self-configuring plugin package to your pro
 
 ### Adding Required Configurations
 
-This package requires specific configurations in your package.json.
+This package requires specific configurations in your package.json or .cdsrc.json.
 
 ```json
   "cds": {
@@ -137,7 +137,7 @@ extend EventData with {
 }
 ```
 
-the new fields will be automatically filled with the data of the incoming event.
+The new fields will be automatically filled with the data of the incoming event.
 Make sure, that a corresponding data field is present in the event body.
 In this example e.g.
 
