@@ -12,7 +12,7 @@ The Event Monitoring Plugin provides a robust event monitoring service capable o
   - [Extending the Service](#extending-the-service)
   - [Extending the Service and Event Logic](#extending-the-service-and-event-logic)
   - [Fiori annotations](#fiori-annotations)
-  - [Extend Database table](#extend-database-table)
+  - [Extending the database table](#extending-the-database-table)
 
 ## Setup
 
@@ -123,8 +123,9 @@ module.exports = class EventServiceExt extends EventServiceHandler {
 ## Fiori annotations
 
 The `Events` includes several predefined Fiori annotations, which can be used and extended to develop an event monitoring UI.
+You can find an example in the `testProject/app` folder of the github repository.
 
-## Extend Database table
+## Extending the database table
 
 If you want to store specific fields in separate database columns (for example for searching purposes) you can do so, by extending the cds entity `EventData`.
 
