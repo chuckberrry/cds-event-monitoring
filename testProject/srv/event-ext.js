@@ -1,5 +1,5 @@
 const cds = require('@sap/cds');
-const EventServiceHandler = require('@brenntag/dih-dl-event-monitoring-package/srv');
+const EventServiceHandler = require('cds-event-monitoring/srv');
 module.exports = class EventServiceExt extends EventServiceHandler {
   async init() {
     const messaging = await cds.connect.to('messaging');

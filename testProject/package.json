@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "@brenntag/dih-dl-event-monitoring-package": "../",
+    "cds-event-monitoring": "../",
     "@sap/cds": "^8",
     "@sap/xb-msg-amqp-v100": "^0.9.58"
   },

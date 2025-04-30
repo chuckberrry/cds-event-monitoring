@@ -54,7 +54,7 @@ annotate EventMonitoringService.EventDataView with @(UI: {
   Data: [{Value: data}, ]},
 });
 
-@(impl: '@brenntag/dih-dl-event-monitoring-package/srv')
+@(impl: 'cds-event-monitoring/srv')
 service EventMonitoringService {
 
   action resendAll(topic : String, startTimestamp : Timestamp, endTimestamp : Timestamp);

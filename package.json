@@ -29,10 +29,10 @@
   "cds": {
     "requires": {
       "event-broker": {
-        "impl": "@brenntag/dih-dl-event-monitoring-package/lib/event-handler"
+        "impl": "cds-event-monitoring/lib/event-handler"
       },
       "EventMonitoringService": {
-        "model": "@brenntag/dih-dl-event-monitoring-package/srv",
+        "model": "cds-event-monitoring/srv",
         "service": "EventMonitoringService"
       },
       "dead-message-queues": {

@@ -19,7 +19,7 @@ The Event Monitoring Plugin provides a robust event monitoring service capable o
 To enable event monitoring, add this self-configuring plugin package to your project with the following command:
 
 ```sh
- npm add @brenntag/dih-dl-event-monitoring-package
+ npm add tbd
 ```
 
 ### Adding Required Configurations
@@ -78,7 +78,7 @@ The resend action allows requeuing the event back into the original topic.
 To extend the existing service, add a new CDS service to your project and import the event monitoring service from the package:
 
 ```cds
-using {EventMonitoringService} from '@brenntag/dih-dl-event-monitoring-package/srv';
+using {EventMonitoringService} from 'cds-event-monitoring/srv';
 
 extend EventMonitoringService with @(requires: 'admin');
 ```
@@ -97,7 +97,7 @@ Next, import the existing service implementation and extend it with your own log
 
 ```js
 const cds = require('@sap/cds');
-const EventServiceHandler = require('@brenntag/dih-dl-event-monitoring-package/srv');
+const EventServiceHandler = require('cds-event-monitoring/srv');
 module.exports = class EventServiceExt extends EventServiceHandler {
   async init() {
     const messaging = await cds.connect.to('messaging');
@@ -130,7 +130,7 @@ The `EventDataView` includes several predefined Fiori annotations, which can be 
 If you want to store specific fields in separate database columns (for example for searching purposes) you can do so, by extending the cds entity `EventData`.
 
 ```cds
-using {cap.plugin.eventmonitoring.EventData} from '@brenntag/dih-dl-event-monitoring-package/db';
+using {cap.plugin.eventmonitoring.EventData} from 'cds-event-monitoring/db';
 
 extend EventData with {
   description : String;
