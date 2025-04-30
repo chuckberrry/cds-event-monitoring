@@ -1,4 +1,4 @@
-using {cds.event.monitoring.EventData} from '../db';
+using {event.monitoring.EventData} from '../db';
 
 // -- Fiori Annotations ----------------------------------------------------------
 
@@ -6,7 +6,7 @@ using {cds.event.monitoring.EventData} from '../db';
 //
 //	Event List
 //
-annotate EventMonitoringService.EventDataView with @UI: {
+annotate EventMonitoringService.Events with @UI: {
   SelectionFields: [
     createdAt,
     topic
@@ -23,7 +23,7 @@ annotate EventMonitoringService.EventDataView with @UI: {
 //
 //	Event Details
 //
-annotate EventMonitoringService.EventDataView with @(UI: {
+annotate EventMonitoringService.Events with @(UI: {
   Identification  : [
     {
       $Type             : 'UI.DataFieldForAction',
@@ -60,7 +60,7 @@ service EventMonitoringService {
   action resendAll(topic : String, startTimestamp : Timestamp, endTimestamp : Timestamp);
   action resendDeadMessageQueue(queue : String);
   action sendToTopic(topic : String, message : LargeString);
-  entity EventDataView as projection on EventData
+  entity Events as projection on EventData
     actions {
       action resend();
       action resendToTopic(topic : String);

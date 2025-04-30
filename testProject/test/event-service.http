@@ -2,15 +2,15 @@
 @auth = Authorization: Basic alice:
 
 
-### EventDataView
-# @name EventDataView_GET
-GET {{server}}/odata/v4/event-monitoring/EventDataView
+### Events
+# @name Events_GET
+GET {{server}}/odata/v4/event-monitoring/Events
 {{auth}}
 
 
-### EventDataView
-# @name EventDataView_POST
-POST {{server}}/odata/v4/event-monitoring/EventDataView
+### Events
+# @name Events_POST
+POST {{server}}/odata/v4/event-monitoring/Events
 Content-Type: application/json
 {{auth}}
 

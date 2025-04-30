@@ -6,17 +6,19 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "cds-event-monitoring": "../",
     "@sap/cds": "^8",
-    "@sap/xb-msg-amqp-v100": "^0.9.58"
+    "@sap/xb-msg-amqp-v100": "^0.9.58",
+    "cds-event-monitoring": "../"
   },
   "devDependencies": {
+    "@cap-js/hana": "^1",
     "@cap-js/sqlite": "^1",
-    "@cap-js/hana": "^1"
+    "@sap/ux-specification": "^1.124.15"
   },
   "scripts": {
     "start": "cds-serve",
-    "cds:watch": "DEBUG=sql cds watch --profile hybrid"
+    "cds:watch": "DEBUG=sql cds watch --profile hybrid",
+    "watch-event-monitoring-app": "cds watch --open event-monitoring-app/webapp/index.html?sap-ui-xx-viewCache=false"
   },
   "cds": {
     "requires": {
@@ -39,12 +41,16 @@
         "retentionInDays": 7,
         "ignoreIdenticalEvents": true,
         "topics": [
-          "<namespace>/events/*"
+          "plugin/example/1/test",
+          "plugin/example/1/test2"
         ],
         "dead-message-queues": [
-          "<namespace>/events/dih-tms-api-app/dead-message-queue"
+          "plugin/example/1/dead-message-queue"
         ]
       }
     }
-  }
+  },
+  "sapux": [
+    "app/event-monitoring-app"
+  ]
 }

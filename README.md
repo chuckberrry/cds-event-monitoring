@@ -43,13 +43,12 @@ This package requires specific configurations in your package.json.
   }
 ```
 
-**topics** [Array of Strings]: Defines the topics that the package will monitor.
-
-**retentionInDays (optional)** [Integer]: Specifies the number of days to retain events in the database. Events are deleted when a new event is detected. If no events are received, no deletion occurs.
-
-**ignoreIdenticalEvents (optional)** [Boolean]: If you want to keep identical events (e.g. from retries), set this flag to false. Default: `true`.
-
-**dead-message-queues (optional)** [Array of Strings]: Defines the dead-message queues that will be monitored. Be aware that messages from the DMQ will be consumed and acknowledged.
+| Configuration Option             | Type             | Description                                                                                                                                                    |
+| -------------------------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| topics                           | Array of Strings | Defines the topics that the package will monitor.                                                                                                              |
+| retentionInDays (optional)       | Integer          | Specifies the number of days to retain events in the database. Events are deleted when a new event is detected. If no events are received, no deletion occurs. |
+| ignoreIdenticalEvents (optional) | Boolean          | If you want to ignore events with the same data (e.g., from retries), set this flag to `true`. Default: `false`.                                                            |
+| dead-message-queues (optional)   | Array of Strings | Defines the dead-message queues that will be monitored. Be aware that messages from the DMQ will be consumed and acknowledged.                                 |
 
 ## Default service definition
 
@@ -62,7 +61,7 @@ service EventMonitoringService {
   action resendDeadMessageQueue(queue : String);
   action sendToTopic(topic : String, message : LargeString);
 
-  entity EventDataView as projection on EventData
+  entity Events as projection on EventData
     actions {
       action resend();
       action resendToTopic(topic : String);
@@ -123,14 +122,14 @@ module.exports = class EventServiceExt extends EventServiceHandler {
 
 ## Fiori annotations
 
-The `EventDataView` includes several predefined Fiori annotations, which can be used and extended to develop an event monitoring UI.
+The `Events` includes several predefined Fiori annotations, which can be used and extended to develop an event monitoring UI.
 
 ## Extend Database table
 
 If you want to store specific fields in separate database columns (for example for searching purposes) you can do so, by extending the cds entity `EventData`.
 
 ```cds
-using {cds.event.monitoring.EventData} from 'cds-event-monitoring/db';
+using {event.monitoring.EventData} from 'cds-event-monitoring/db';
 
 extend EventData with {
   description : String;

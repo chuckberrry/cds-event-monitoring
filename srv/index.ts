@@ -1,13 +1,13 @@
 // srv/index.ts
 import { ApplicationService, connect, log, Request } from '@sap/cds';
-const EventData = 'cds.event.monitoring.EventData';
+const EventData = 'event.monitoring.EventData';
 
 export = class EventServiceHandler extends ApplicationService {
   async init(): Promise<void> {
     const messaging = await connect.to('messaging');
     const LOG = log('event-monitoring');
 
-    this.on('resend', 'EventDataView', async (req: Request) => {
+    this.on('resend', 'Events', async (req: Request) => {
       const id = req.params[0];
       LOG.debug(`Resend Event with ID: ${id}`);
   
@@ -18,7 +18,7 @@ export = class EventServiceHandler extends ApplicationService {
       messaging.emit(eventData.topic, this.parseData(eventData.data));
     });
 
-    this.on('resendToTopic', 'EventDataView', async (req: Request) => {
+    this.on('resendToTopic', 'Events', async (req: Request) => {
       const id = req.params[0];
       const { topic } = req.data;
       LOG.debug(`Resend Event with ID: ${id} to topic: ${topic}`);

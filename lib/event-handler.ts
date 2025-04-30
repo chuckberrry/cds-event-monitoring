@@ -1,7 +1,7 @@
 import cds from '@sap/cds';
 import crypto from 'crypto';
 
-const EventData = 'cds.event.monitoring.EventData';
+const EventData = 'event.monitoring.EventData';
 
 interface EventMessage {
   data: Record<string, any>;
@@ -33,7 +33,7 @@ export default class EventHandler extends cds.Service {
         const { data, event } = msg;
         const eventData = this.buildEventData(event, data);
 
-        if (eventMonitoring.ignoreIdenticalEvents !== false) {
+        if (eventMonitoring.ignoreIdenticalEvents) {
           const existingEventData = await db.run(SELECT.one.from(EventData).where({ hash: this.calculateHash(eventData) }));
           if (existingEventData) {
             return;
@@ -58,7 +58,7 @@ export default class EventHandler extends cds.Service {
         return db.run(INSERT.into(EventData).entries(eventData));
       });
     }
-  
+
     return super.init();
   }
 
@@ -70,9 +70,11 @@ export default class EventHandler extends cds.Service {
 
   buildEventData(event: string, data: Record<string, any>): Record<string, any> {
     const eventData: Record<string, any> = {};
-    for (const key in cds.entities[EventData].elements) {
+    const eventDataEntity = cds.model?.definitions[EventData] as cds.linked.LinkedDefinitions | undefined;
+    for (const key in eventDataEntity?.elements) {
       if (data.hasOwnProperty(key)) {
-        eventData[key] = JSON.stringify(data[key]);
+        const value = data[key];
+        eventData[key] = typeof value === 'object' && value !== null ? JSON.stringify(value) : value;
       }
     }
     eventData.data = JSON.stringify(data);

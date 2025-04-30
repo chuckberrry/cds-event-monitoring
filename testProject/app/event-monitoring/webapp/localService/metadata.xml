@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="EventMonitoringService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="Events" EntityType="EventMonitoringService.Events"/>
+                <ActionImport Name="resendAll" Action="EventMonitoringService.resendAll"/>
+                <ActionImport Name="resendDeadMessageQueue" Action="EventMonitoringService.resendDeadMessageQueue"/>
+                <ActionImport Name="sendToTopic" Action="EventMonitoringService.sendToTopic"/>
+            </EntityContainer>
+            <EntityType Name="Events">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="data" Type="Edm.String" Nullable="false"/>
+                <Property Name="topic" Type="Edm.String" Nullable="false"/>
+                <Property Name="dmq" Type="Edm.String"/>
+                <Property Name="hash" Type="Edm.String"/>
+                <Property Name="entityKey" Type="Edm.String"/>
+            </EntityType>
+            <Action Name="resend" IsBound="true">
+                <Parameter Name="in" Type="EventMonitoringService.Events"/>
+            </Action>
+            <Action Name="resendToTopic" IsBound="true">
+                <Parameter Name="in" Type="EventMonitoringService.Events"/>
+                <Parameter Name="topic" Type="Edm.String"/>
+            </Action>
+            <Action Name="resendAll" IsBound="false">
+                <Parameter Name="topic" Type="Edm.String"/>
+                <Parameter Name="startTimestamp" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Parameter Name="endTimestamp" Type="Edm.DateTimeOffset" Precision="7"/>
+            </Action>
+            <Action Name="resendDeadMessageQueue" IsBound="false">
+                <Parameter Name="queue" Type="Edm.String"/>
+            </Action>
+            <Action Name="sendToTopic" IsBound="false">
+                <Parameter Name="topic" Type="Edm.String"/>
+                <Parameter Name="message" Type="Edm.String"/>
+            </Action>
+            <Annotations Target="EventMonitoringService.Events">
+                <Annotation Term="UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>createdAt</PropertyPath>
+                        <PropertyPath>topic</PropertyPath>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="ID"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="createdAt"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="topic"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataFieldForAction">
+                            <PropertyValue Property="Action" String="EventMonitoringService.resend"/>
+                            <PropertyValue Property="Label" String="{i18n>Resend}"/>
+                                <PropertyValue Property="InvocationGrouping" EnumMember="UI.OperationGroupingType/Isolated"/>
+                            </Record>
+                            <Record Type="UI.DataFieldForAction">
+                                <PropertyValue Property="Action" String="EventMonitoringService.resendToTopic"/>
+                                <PropertyValue Property="Label" String="{i18n>ResendToTopic}"/>
+                                    <PropertyValue Property="InvocationGrouping" EnumMember="UI.OperationGroupingType/Isolated"/>
+                                </Record>
+                            </Collection>
+                        </Annotation>
+                        <Annotation Term="UI.HeaderInfo">
+                            <Record Type="UI.HeaderInfoType">
+                                <PropertyValue Property="TypeName" String="{i18n>EventData}"/>
+                                    <PropertyValue Property="TypeNamePlural" String="{i18n>EventData}"/>
+                                        <PropertyValue Property="Title">
+                                            <Record Type="UI.DataField">
+                                                <PropertyValue Property="Value" Path="ID"/>
+                                            </Record>
+                                        </PropertyValue>
+                                        <PropertyValue Property="Description">
+                                            <Record Type="UI.DataField">
+                                                <PropertyValue Property="Value" Path="topic"/>
+                                            </Record>
+                                        </PropertyValue>
+                                    </Record>
+                                </Annotation>
+                                <Annotation Term="UI.Facets">
+                                    <Collection>
+                                        <Record Type="UI.ReferenceFacet">
+                                            <PropertyValue Property="Label" String="{i18n>Data}"/>
+                                                <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Data"/>
+                                            </Record>
+                                        </Collection>
+                                    </Annotation>
+                                    <Annotation Term="UI.FieldGroup" Qualifier="Data">
+                                        <Record Type="UI.FieldGroupType">
+                                            <PropertyValue Property="Data">
+                                                <Collection>
+                                                    <Record Type="UI.DataField">
+                                                        <PropertyValue Property="Value" Path="data"/>
+                                                    </Record>
+                                                </Collection>
+                                            </PropertyValue>
+                                        </Record>
+                                    </Annotation>
+                                </Annotations>
+                                <Annotations Target="EventMonitoringService.Events/createdAt">
+                                    <Annotation Term="Core.Computed" Bool="true"/>
+                                    <Annotation Term="Common.Label" String="Created At"/>
+                                </Annotations>
+                                <Annotations Target="EventMonitoringService.Events/data">
+                                    <Annotation Term="Common.Label" String="Data"/>
+                                </Annotations>
+                                <Annotations Target="EventMonitoringService.Events/topic">
+                                    <Annotation Term="Common.Label" String="Topic"/>
+                                </Annotations>
+                                <Annotations Target="EventMonitoringService.Events/dmq">
+                                    <Annotation Term="Common.Label" String="Dead Message Queue"/>
+                                </Annotations>
+                                <Annotations Target="EventMonitoringService.Events/hash">
+                                    <Annotation Term="Core.Computed" Bool="true"/>
+                                </Annotations>
+                            </Schema>
+                        </edmx:DataServices>
+                    </edmx:Edmx>

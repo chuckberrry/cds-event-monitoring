@@ -4,8 +4,8 @@ module.exports = class EventServiceExt extends EventServiceHandler {
   async init() {
     const messaging = await cds.connect.to('messaging');
 
-    // change messaging behavior
-    messaging.on('*', (msg) => {
+    // extend messaging behavior
+    messaging.on('plugin/example/1/test2', (msg) => {
       const { data, event } = msg;
       console.log(data);
       console.log(event);

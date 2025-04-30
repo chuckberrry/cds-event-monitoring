@@ -1,4 +1,4 @@
-namespace cds.event.monitoring;
+namespace event.monitoring;
 
 entity EventData {
     key ID        : UUID;
