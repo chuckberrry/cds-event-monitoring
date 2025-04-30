@@ -1,0 +1,50 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@brenntag/dih-dl-event-monitoring-package": "../",
+    "@sap/cds": "^8",
+    "@sap/xb-msg-amqp-v100": "^0.9.58"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^1",
+    "@cap-js/hana": "^1"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "cds:watch": "DEBUG=sql cds watch --profile hybrid"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sql",
+        "credentials": {
+          "url": ":memory:"
+        }
+      },
+      "messaging": {
+        "kind": "enterprise-messaging",
+        "[hybrid]": {
+          "kind": "enterprise-messaging-shared"
+        },
+        "[test]": {
+          "kind": "local-messaging"
+        }
+      },
+      "event-monitoring": {
+        "retentionInDays": 7,
+        "ignoreIdenticalEvents": true,
+        "topics": [
+          "brenntag/dih-tms/events/*"
+        ],
+        "dead-message-queues": [
+          "brenntag/dih-tms/events/dih-tms-api-app/dead-message-queue"
+        ]
+      }
+    }
+  }
+}

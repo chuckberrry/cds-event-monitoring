@@ -1,0 +1,48 @@
+@server = http://localhost:4004
+@auth = Authorization: Basic alice:
+
+
+### EventDataView
+# @name EventDataView_GET
+GET {{server}}/odata/v4/event-monitoring/EventDataView
+{{auth}}
+
+
+### EventDataView
+# @name EventDataView_POST
+POST {{server}}/odata/v4/event-monitoring/EventDataView
+Content-Type: application/json
+{{auth}}
+
+{
+  "ID": "11924642-25fe-4adc-bdf2-606c9607df2c",
+  "createdAt": "2023-09-28T23:00:00.000Z",
+  "data": "data-1192464",
+  "topic": "topic-1192464",
+  "dmq": "dmq-1192464",
+  "description": "description-1192464",
+  "entityKey": "entityKey-1192464"
+}
+
+### resendAll
+# @name resendAll_POST
+POST {{server}}/odata/v4/event-monitoring/resendAll
+Content-Type: application/json
+{{auth}}
+
+{
+  "topic": "brenntag/dih-tms/events/tms/dl/supplier",
+  "startTimestamp": "2024-10-11T19:40:19.719Z",
+  "endTimestamp": "2024-10-12T19:40:19.719Z"
+}
+
+
+### resendDeadMessageQueue
+# @name resendDeadMessageQueue_POST
+POST {{server}}/odata/v4/event-monitoring/resendDeadMessageQueue
+Content-Type: application/json
+{{auth}}
+
+{
+  "queue": null
+}

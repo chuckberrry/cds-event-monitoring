@@ -1,0 +1,45 @@
+{
+  "name": "cds-event-monitoring",
+  "description": "CAP cds-plugin providing event monitoring service out-of-the-box.",
+  "version": "0.0.1",
+  "author": "Armin Hatting",
+  "homepage": "https://cap.cloud.sap/",
+  "license": "SEE LICENSE IN LICENSE",
+  "main": "cds-plugin.js",
+  "files": [
+    "lib",
+    "srv",
+    "db"
+  ],
+  "scripts": {
+    "lint": "npx eslint .",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^1.0.1",
+    "@cap-js/cds-types": "^0.9.0",
+    "eslint": "^8",
+    "@types/node": "^20.11.17",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "@sap/cds": ">=7",
+    "@sap/xb-msg-amqp-v100": ">=0.9.58"
+  },
+  "cds": {
+    "requires": {
+      "event-broker": {
+        "impl": "@brenntag/dih-dl-event-monitoring-package/lib/event-handler"
+      },
+      "EventMonitoringService": {
+        "model": "@brenntag/dih-dl-event-monitoring-package/srv",
+        "service": "EventMonitoringService"
+      },
+      "dead-message-queues": {
+        "[hybrid]": {
+          "kind": "enterprise-messaging-shared"
+        }
+      }
+    }
+  }
+}
