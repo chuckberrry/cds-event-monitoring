@@ -3,7 +3,7 @@ using {
   managed,
   sap
 } from '@sap/cds/common';
-using {cap.plugin.eventmonitoring.EventData} from 'cds-event-monitoring/db';
+using {cds.event.monitoring.EventData} from 'cds-event-monitoring/db';
 
 namespace my.plugin.test;
 

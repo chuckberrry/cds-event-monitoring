@@ -1,6 +1,6 @@
 // srv/index.ts
 import { ApplicationService, connect, log, Request } from '@sap/cds';
-const EventData = 'cap.plugin.eventmonitoring.EventData';
+const EventData = 'cds.event.monitoring.EventData';
 
 export = class EventServiceHandler extends ApplicationService {
   async init(): Promise<void> {

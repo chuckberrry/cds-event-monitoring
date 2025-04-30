@@ -1,4 +1,4 @@
-using {cap.plugin.eventmonitoring.EventData} from '../db';
+using {cds.event.monitoring.EventData} from '../db';
 
 // -- Fiori Annotations ----------------------------------------------------------
 

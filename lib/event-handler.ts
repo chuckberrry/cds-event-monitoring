@@ -1,7 +1,7 @@
 import cds from '@sap/cds';
 import crypto from 'crypto';
 
-const EventData = 'cap.plugin.eventmonitoring.EventData';
+const EventData = 'cds.event.monitoring.EventData';
 
 interface EventMessage {
   data: Record<string, any>;

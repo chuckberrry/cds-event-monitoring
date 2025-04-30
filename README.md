@@ -1,10 +1,10 @@
-# Event Monitoring Plugin
+# CDS Event Monitoring Plugin
 
 The Event Monitoring Plugin provides a robust event monitoring service capable of hooking into multiple topics and storing event data in a database table. It exposes this data through a CDS service that users can extend as needed. For an example of how to use this package, refer to the testProject folder.
 
 ## Table of Content
 
-- [Event Monitoring Plugin](#event-monitoring-plugin)
+- [CDS Event Monitoring Plugin](#cds-event-monitoring-plugin)
   - [Table of Content](#table-of-content)
   - [Setup](#setup)
     - [Adding Required Configurations](#adding-required-configurations)
@@ -19,7 +19,7 @@ The Event Monitoring Plugin provides a robust event monitoring service capable o
 To enable event monitoring, add this self-configuring plugin package to your project with the following command:
 
 ```sh
- npm add tbd
+ npm add cds-event-monitoring
 ```
 
 ### Adding Required Configurations
@@ -33,10 +33,10 @@ This package requires specific configurations in your package.json.
       "event-monitoring": {
         "retentionInDays": 7,
         "topics": [
-          "<namespace>/events/*"
+          "<namespace>/*"
         ],
         "dead-message-queues": [
-          "<namespace>/events/dih-tms-api-app/dead-message-queue"
+          "<namespace>/<dead-message-queue-name>"
         ]
       }
     }
@@ -130,7 +130,7 @@ The `EventDataView` includes several predefined Fiori annotations, which can be 
 If you want to store specific fields in separate database columns (for example for searching purposes) you can do so, by extending the cds entity `EventData`.
 
 ```cds
-using {cap.plugin.eventmonitoring.EventData} from 'cds-event-monitoring/db';
+using {cds.event.monitoring.EventData} from 'cds-event-monitoring/db';
 
 extend EventData with {
   description : String;

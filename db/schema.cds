@@ -1,4 +1,4 @@
-namespace cap.plugin.eventmonitoring;
+namespace cds.event.monitoring;
 
 entity EventData {
     key ID        : UUID;
