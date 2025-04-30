@@ -1,40 +1,151 @@
-# Event Mesh Monitoring Plugin
+# Event Monitoring Plugin
 
-The `@cap-js/attachments` package is a [CDS plugin](https://cap.cloud.sap/docs/node.js/cds-plugins#cds-plugin-packages) that provides out-of-the box asset storage and handling by using an *aspect* `Attachments`. It also provides a CAP-level, easy to use integration of the SAP Object Store.
+The Event Monitoring Plugin provides a robust event monitoring service capable of hooking into multiple topics and storing event data in a database table. It exposes this data through a CDS service that users can extend as needed. For an example of how to use this package, refer to the testProject folder.
 
-### Table of Contents
+## Table of Content
 
-- [Event Mesh Monitoring Plugin](#event-mesh-monitoring-plugin)
-    - [Table of Contents](#table-of-contents)
+- [Event Monitoring Plugin](#event-monitoring-plugin)
+  - [Table of Content](#table-of-content)
   - [Setup](#setup)
-  - [Use Event Mesh Monitoring](#use-event-mesh-monitoring)
-  - [Contributing](#contributing)
-  - [Code of Conduct](#code-of-conduct)
-  - [Licensing](#licensing)
+    - [Adding Required Configurations](#adding-required-configurations)
+  - [Default service definition](#default-service-definition)
+  - [Extending the Service](#extending-the-service)
+  - [Extending the Service and Event Logic](#extending-the-service-and-event-logic)
+  - [Fiori annotations](#fiori-annotations)
+  - [Extend Database table](#extend-database-table)
 
 ## Setup
 
-To enable attachments, simply add this self-configuring plugin package to your project:
+To enable event monitoring, add this self-configuring plugin package to your project with the following command:
 
 ```sh
- npm add @cap-js/attachments
+ npm add @brenntag/dih-dl-event-monitoring-package
 ```
 
-In this guide, we use the [Incidents Management reference sample app](https://github.com/cap-js/incidents-app) as the base application, to add `Attachments` type to the CDS model.
+### Adding Required Configurations
 
-> [!Note]
-> To be able to use the Fiori *uploadTable* feature, you must ensure ^1.121.0 SAPUI5 version is updated in the application's *index.html*
+This package requires specific configurations in your package.json.
 
-## Use Event Mesh Monitoring
+```json
+  "cds": {
+    "requires": {
+      ...
+      "event-monitoring": {
+        "retentionInDays": 7,
+        "topics": [
+          "brenntag/dih-tms/events/*"
+        ],
+        "dead-message-queues": [
+          "brenntag/dih-tms/events/dih-tms-api-app/dead-message-queue"
+        ]
+      }
+    }
+  }
+```
 
-## Contributing
+**topics** [Array of Strings]: Defines the topics that the package will monitor.
 
-This project is open to feature requests/suggestions, bug reports etc. via [GitHub issues](https://github.com/cap-js/attachments/issues). Contribution and feedback are encouraged and always welcome. For more information about how to contribute, the project structure, as well as additional contribution information, see our [Contribution Guidelines](CONTRIBUTING.md).
+**retentionInDays (optional)** [Integer]: Specifies the number of days to retain events in the database. Events are deleted when a new event is detected. If no events are received, no deletion occurs.
 
-## Code of Conduct
+**ignoreIdenticalEvents (optional)** [Boolean]: If you want to keep identical events (e.g. from retries), set this flag to false. Default: `true`.
 
-We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for everyone. By participating in this project, you agree to abide by its [Code of Conduct](CODE_OF_CONDUCT.md) at all times.
+**dead-message-queues (optional)** [Array of Strings]: Defines the dead-message queues that will be monitored. Be aware that messages from the DMQ will be consumed and acknowledged.
 
-## Licensing
+## Default service definition
 
-Copyright 2024 SAP SE or an SAP affiliate company and contributors. Please see our [LICENSE](LICENSE) for copyright and license information. Detailed information including third-party components and their licensing/copyright information is available [via the REUSE tool](https://api.reuse.software/info/github.com/cap-js/attachmentstea).
+The package includes a default service definition, providing an endpoint for interacting with event data.
+
+```cds
+service EventMonitoringService {
+
+  action resendAll(topic : String, startTimestamp : Timestamp, endTimestamp : Timestamp);
+  action resendDeadMessageQueue(queue : String);
+  action sendToTopic(topic : String, message : LargeString);
+
+  entity EventDataView as projection on EventData
+    actions {
+      action resend();
+      action resendToTopic(topic : String);
+    };
+
+}
+```
+
+The resend action allows requeuing the event back into the original topic.
+
+## Extending the Service
+
+To extend the existing service, add a new CDS service to your project and import the event monitoring service from the package:
+
+```cds
+using {EventMonitoringService} from '@brenntag/dih-dl-event-monitoring-package/srv';
+
+extend EventMonitoringService with @(requires: 'admin');
+```
+
+In this example, the service is extended with a custom scope.
+
+## Extending the Service and Event Logic
+
+You can create your own service implementation that extends the existing one. Use the `@impl` annotation to reference an implementation file.
+
+```cds
+extend EventMonitoringService with @(impl: 'srv/event-ext.js');
+```
+
+Next, import the existing service implementation and extend it with your own logic:
+
+```js
+const cds = require('@sap/cds');
+const EventServiceHandler = require('@brenntag/dih-dl-event-monitoring-package/srv');
+module.exports = class EventServiceExt extends EventServiceHandler {
+  async init() {
+    const messaging = await cds.connect.to('messaging');
+
+    // extend messaging behavior
+    messaging.on('*', (msg) => {
+      const { data, event } = msg;
+      console.log(data);
+      console.log(event);
+    });
+
+    // hook into CRUD events
+    this.after('each', (data) => {
+      console.log(data);
+    });
+
+    return super.init();
+  }
+};
+```
+
+**Note**: New messaging handlers will execute before the event logic provided by the package, ensuring you do not overwrite existing logic.
+
+## Fiori annotations
+
+The `EventDataView` includes several predefined Fiori annotations, which can be used and extended to develop an event monitoring UI.
+
+## Extend Database table
+
+If you want to store specific fields in separate database columns (for example for searching purposes) you can do so, by extending the cds entity `EventData`.
+
+```cds
+using {cap.plugin.eventmonitoring.EventData} from '@brenntag/dih-dl-event-monitoring-package/db';
+
+extend EventData with {
+  description : String;
+}
+```
+
+the new fields will be automatically filled with the data of the incoming event.
+Make sure, that a corresponding data field is present in the event body.
+In this example e.g.
+
+```json
+{
+  "data": {
+    ...,
+    "description": "<description-string>"
+  }
+}
+```
