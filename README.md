@@ -1,6 +1,6 @@
 # CDS Event Monitoring Plugin
 
-The Event Monitoring Plugin provides a robust event monitoring service capable of hooking into multiple topics and storing event data in a database table. It exposes this data through a CDS service that users can extend as needed. For an example of how to use this package, refer to the testProject folder of the github repository.
+The Event Monitoring Plugin provides a robust event monitoring service capable of hooking into multiple topics and storing event data in a database table. It exposes this data through a CDS service that users can extend as needed. This is perfect if you want to keep track of your event data and need retry/resend functionalities. For an example of how to use this package, refer to the testProject folder of the github repository.
 
 ## Table of Content
 
@@ -16,7 +16,7 @@ The Event Monitoring Plugin provides a robust event monitoring service capable o
 
 ## Setup
 
-To enable event monitoring, add this self-configuring plugin package to your project with the following command:
+To enable event monitoring, add plugin package to your project with the following command:
 
 ```sh
  npm add cds-event-monitoring
@@ -33,7 +33,7 @@ This package requires specific configurations in your package.json or .cdsrc.jso
       "event-monitoring": {
         "retentionInDays": 7,
         "topics": [
-          "<namespace>/*"
+          "<namespace>/<topic-name>"
         ],
         "dead-message-queues": [
           "<namespace>/<dead-message-queue-name>"
@@ -119,6 +119,29 @@ module.exports = class EventServiceExt extends EventServiceHandler {
 ```
 
 **Note**: New messaging handlers will execute before the event logic provided by the package, ensuring you do not overwrite existing logic.
+
+Service extensions are also compatible with TS projects.
+
+```TS
+import cds from '@sap/cds';
+
+import EventServiceHandler from 'cds-event-monitoring/srv';
+
+export default class EventServiceExt extends EventServiceHandler {
+  async init() {
+    const messaging = await cds.connect.to('messaging');
+
+    // extend messaging behavior
+    messaging.on('*', (msg) => {
+      const { data, event } = msg;
+      console.log(data);
+      console.log(event);
+    });
+
+    return super.init();
+  }
+}
+```
 
 ## Fiori annotations
 

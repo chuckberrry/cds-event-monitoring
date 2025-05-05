@@ -2,7 +2,7 @@
 import { ApplicationService, connect, log, Request } from '@sap/cds';
 const EventData = 'event.monitoring.EventData';
 
-export = class EventServiceHandler extends ApplicationService {
+export default class EventServiceHandler extends ApplicationService {
   async init(): Promise<void> {
     const messaging = await connect.to('messaging');
     const LOG = log('event-monitoring');

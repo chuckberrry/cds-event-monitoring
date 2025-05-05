@@ -8,6 +8,7 @@
       "preserveConstEnums": true,
       "sourceMap": false,
       "allowJs": true,
+      "declaration": true,
       "strict": true,
       "strictNullChecks": true,
       "strictPropertyInitialization": false,

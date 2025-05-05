@@ -117,3 +117,4 @@ dist
 cds-plugin.js
 lib/event-handler.js
 srv/index.js
+*.d.ts
