@@ -2,6 +2,16 @@
 
 The Event Monitoring Plugin provides a robust event monitoring service capable of hooking into multiple topics and storing event data in a database table. It exposes this data through a CDS service that users can extend as needed. This is perfect if you want to keep track of your event data and need retry/resend functionalities. For an example of how to use this package, refer to the testProject folder of the github repository.
 
+**Features**
+
+- Event Monitoring for Multiple Topics
+- Stores event data in a customizable CDS entity/table.
+- Provides a default CDS service (EventMonitoringService) to interact with event data.
+- Actions to resend individual events, all events, or dead-message queue events.
+- Monitors and consumes messages from specified DMQs.
+- Configurable retentionInDays setting to automatically delete old events.
+- Duplicate Event Filtering
+
 ## Table of Content
 
 - [CDS Event Monitoring Plugin](#cds-event-monitoring-plugin)
