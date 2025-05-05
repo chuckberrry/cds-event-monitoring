@@ -26,7 +26,7 @@ The Event Monitoring Plugin provides a robust event monitoring service capable o
 
 ## Setup
 
-To enable event monitoring, add plugin package to your project with the following command:
+To enable event monitoring, add this plugin package to your project with the following command:
 
 ```sh
  npm add cds-event-monitoring
