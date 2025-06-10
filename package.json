@@ -1,7 +1,7 @@
 {
   "name": "cds-event-monitoring",
   "description": "CAP cds-plugin providing event monitoring service out-of-the-box.",
-  "version": "0.0.12",
+  "version": "0.1.1",
   "author": "Armin Hatting",
   "homepage": "https://github.com/chuckberrry/cds-event-monitoring",
   "license": "MIT",
@@ -11,6 +11,7 @@
     "lib/event-handler.d.ts",
     "srv/index.js",
     "srv/index.d.ts",
+    "srv/index.cds",
     "db"
   ],
   "scripts": {
