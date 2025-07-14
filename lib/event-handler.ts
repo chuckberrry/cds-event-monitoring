@@ -45,7 +45,7 @@ export default class EventHandler extends cds.Service {
     }
 
     for (const deadMessageQueue of eventMonitoring?.['dead-message-queues'] ?? []) {
-      const queueConnection = await cds.connect.to('dead-message-queues', {
+      const queueConnection = await cds.connect.to('messaging', {
         kind: messaging.kind,
         // @ts-expect-error
         queue: { name: deadMessageQueue }
